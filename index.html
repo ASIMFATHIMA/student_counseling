@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Counselling Management System</title>
+    <meta name="description"
+        content="College Student Counselling Management System - Registration, Sessions, Appointments, Reports & Analytics.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- ========== LOGIN PAGE ========== -->
+    <div class="login-page" id="loginPage">
+        <div class="login-left">
+            <div class="login-brand">
+                <div class="login-logo">
+                    <i class="fas fa-heart-pulse"></i>
+                </div>
+                <h1>Student Counselling</h1>
+                <p>MANAGEMENT SYSTEM</p>
+            </div>
+            <div class="login-tagline">
+                <h2>Empowering students.<br>Supporting wellness.</h2>
+                <p>Track sessions, manage appointments, and monitor student progress — all in one place.</p>
+            </div>
+            <div class="login-features">
+                <div class="login-feature"><i class="fas fa-user-graduate"></i><span>Student Registration</span></div>
+                <div class="login-feature"><i class="fas fa-comments"></i><span>Session Tracking</span></div>
+                <div class="login-feature"><i class="fas fa-chart-bar"></i><span>Reports & Analytics</span></div>
+            </div>
+        </div>
+        <div class="login-right">
+            <div class="login-card">
+                <h2>Welcome Back</h2>
+                <p class="login-subtitle">Sign in to your account</p>
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="login-field">
+                        <label for="loginUsername"><i class="fas fa-user"></i> Username</label>
+                        <input type="text" id="loginUsername" placeholder="Enter your username" required
+                            autocomplete="username">
+                    </div>
+                    <div class="login-field">
+                        <label for="loginPassword"><i class="fas fa-lock"></i> Password</label>
+                        <div class="password-wrap">
+                            <input type="password" id="loginPassword" placeholder="Enter your password" required
+                                autocomplete="current-password">
+                            <button type="button" class="toggle-pass" onclick="togglePassword()"><i class="fas fa-eye"
+                                    id="eyeIcon"></i></button>
+                        </div>
+                    </div>
+                    <div class="login-options">
+                        <label class="remember-me">
+                            <input type="checkbox" id="rememberMe"> Remember me
+                        </label>
+                        <a href="#" class="forgot-link">Forgot password?</a>
+                    </div>
+                    <p class="login-error" id="loginError"></p>
+                    <button type="submit" class="login-btn" id="loginBtn">
+                        <span>Sign In</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+                <div class="login-hint">
+                    <p><i class="fas fa-info-circle"></i> Demo: <strong>admin</strong> / <strong>admin123</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container" id="appContainer" style="display:none;">
+        <!-- ========== SIDEBAR ========== -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <h1>Student Counselling</h1>
+                <p>MANAGEMENT SYSTEM</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-th-large"></i><span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-page="students">
+                    <i class="fas fa-user-graduate"></i><span>Students</span>
+                </a>
+                <a href="#" class="nav-item" data-page="sessions">
+                    <i class="fas fa-comments"></i><span>Sessions</span>
+                </a>
+                <a href="#" class="nav-item" data-page="appointments">
+                    <i class="fas fa-calendar-check"></i><span>Appointments</span>
+                </a>
+                <a href="#" class="nav-item" data-page="counsellors">
+                    <i class="fas fa-user-tie"></i><span>Counsellors</span>
+                </a>
+                <a href="#" class="nav-item" data-page="reports">
+                    <i class="fas fa-chart-bar"></i><span>Reports</span>
+                </a>
+                <a href="#" class="nav-item" data-page="history">
+                    <i class="fas fa-clock-rotate-left"></i><span>History</span>
+                </a>
+            </nav>
+            <div class="sidebar-profile">
+                <div class="profile-avatar">MM</div>
+                <div class="profile-info">
+                    <span class="profile-name">Ms. Malini</span>
+                    <span class="profile-role">Senior Counsellor</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ========== MAIN CONTENT ========== -->
+        <main class="main-content" id="mainContent">
+
+            <!-- ==================== PAGE: DASHBOARD ==================== -->
+            <div class="page active" id="page-dashboard">
+                <header class="page-header">
+                    <div class="header-left">
+                        <h2>Dashboard</h2>
+                        <span class="header-date">April 2026, Semester II</span>
+                        <span class="header-alerts" id="alertsBadge">3 alerts</span>
+                    </div>
+                    <div class="header-right">
+                        <button class="btn-primary" id="newSessionBtn" onclick="navigateTo('sessions')">
+                            <i class="fas fa-plus"></i> New Session
+                        </button>
+                    </div>
+                </header>
+
+                <section class="stat-cards" id="dashboardStats">
+                    <div class="stat-card">
+                        <p class="stat-label">Total Students</p>
+                        <h3 class="stat-value" id="totalStudentsCount">0</h3>
+                        <span class="stat-change positive"><i class="fas fa-arrow-up"></i> registered</span>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-label">Sessions This Month</p>
+                        <h3 class="stat-value" id="totalSessionsCount">0</h3>
+                        <span class="stat-change positive"><i class="fas fa-arrow-up"></i> conducted</span>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-label">Pending Appointments</p>
+                        <h3 class="stat-value" id="pendingApptsCount">0</h3>
+                        <span class="stat-change warning" id="overdueCount">0 overdue</span>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-label">Active Counsellors</p>
+                        <h3 class="stat-value" id="activeCounsellorsCount">0</h3>
+                        <span class="stat-change neutral">available</span>
+                    </div>
+                </section>
+
+                <section class="dashboard-mid">
+                    <div class="card">
+                        <h3 class="card-title">Today's Upcoming Sessions</h3>
+                        <div class="sessions-list" id="todaySessionsList">
+                            <p class="empty-state">No sessions scheduled today</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Concern Distribution</h3>
+                        <div class="concern-list" id="concernChart"></div>
+                    </div>
+                </section>
+
+                <section class="card alerts-card">
+                    <h3 class="card-title">Priority Alerts</h3>
+                    <div class="alerts-list" id="alertsList"></div>
+                </section>
+            </div>
+
+            <!-- ==================== PAGE: STUDENTS ==================== -->
+            <div class="page" id="page-students">
+                <header class="page-header">
+                    <div class="header-left">
+                        <h2>Students</h2>
+                        <span class="header-subtitle" id="studentCountLabel">0 registered</span>
+                    </div>
+                    <div class="header-right">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="studentSearch" placeholder="Search students..."
+                                oninput="filterStudents()">
+                        </div>
+                        <button class="btn-primary" onclick="openModal('studentModal')">
+                            <i class="fas fa-plus"></i> Add Student
+                        </button>
+                    </div>
+                </header>
+
+                <div class="card table-card">
+                    <div class="table-wrap">
+                        <table class="data-table" id="studentsTable">
+                            <thead>
+                                <tr>
+                                    <th>Reg. No</th>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Year</th>
+                                    <th>Contact</th>
+                                    <th>Email</th>
+                                    <th>Issues</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsBody"></tbody>
+                        </table>
+                    </div>
+                    <p class="empty-state" id="studentsEmpty">No students registered yet. Click "Add Student" to begin.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ==================== PAGE: SESSIONS ==================== -->
+            <div class="page" id="page-sessions">
+                <header class="page-header">
+                    <div class="header-left">
+                        <h2>Counselling Sessions</h2>
+                        <span class="header-subtitle" id="sessionCountLabel">0 sessions</span>
+                    </div>
+                    <div class="header-right">
+                        <button class="btn-primary" onclick="openModal('sessionModal')">
+                            <i class="fas fa-plus"></i> New Session
+                        </button>
+                    </div>
+                </header>
+
+                <div class="card table-card">
+                    <div class="table-wrap">
+                        <table class="data-table" id="sessionsTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Student</th>
+                                    <th>Counsellor</th>
+                                    <th>Problem Type</th>
+                                    <th>Remarks</th>
+                                    <th>Action Taken</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sessionsBody"></tbody>
+                        </table>
+                    </div>
+                    <p class="empty-state" id="sessionsEmpty">No sessions recorded yet. Click "New Session" to create
+                        one.</p>
+                </div>
+            </div>
+
+            <!-- ==================== PAGE: APPOINTMENTS ==================== -->
+            <div class="page" id="page-appointments">
+                <header class="page-header">
+                    <div class="header-left">
+                        <h2>Appointments</h2>
+                        <span class="header-subtitle" id="apptCountLabel">0 appointments</span>
+                    </div>
+                    <div class="header-right">
+                        <button class="btn-primary" onclick="openModal('appointmentModal')">
+                            <i class="fas fa-plus"></i> Schedule Appointment
+                        </button>
+                    </div>
+                </header>
+
+                <div class="card table-card">
+                    <div class="table-wrap">
+                        <table class="data-table" id="appointmentsTable">
+                            <thead>
+                                <tr>
+                                    <th>Date & Time</th>
+                                    <th>Student</th>
+                                    <th>Counsellor</th>
+                                    <th>Purpose</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="appointmentsBody"></tbody>
+                        </table>
+                    </div>
+                    <p class="empty-state" id="appointmentsEmpty">No appointments scheduled. Click "Schedule
+                        Appointment" to create one.</p>
+                </div>
+            </div>
+
+            <!-- ==================== PAGE: COUNSELLORS ==================== -->
+            <div class="page" id="page-counsellors">
+                <header class="page-header">
+                    <div class="header-left">
+                        <h2>Counsellors</h2>
+                        <span class="header-subtitle" id="counsellorCountLabel">0 counsellors</span>
+                    </div>
+                    <div class="header-right">
+                        <button class="btn-primary" onclick="openModal('counsellorModal')">
+                            <i class="fas fa-plus"></i> Add Counsellor
+                        </button>
+                    </div>
+                </header>
+
+                <div class="counsellor-grid" id="counsellorGrid"></div>
+                <p class="empty-state card" id="counsellorsEmpty" style="padding:40px;text-align:center;">No counsellors
+                    added yet. Click "Add Counsellor" to begin.</p>
+            </div>
+
+            <!-- ==================== PAGE: REPORTS ==================== -->
+            <div class="page" id="page-reports">
+                <header class="page-header">
+                    <div class="header-left">
+                        <h2>Reports & Analysis</h2>
+                        <span class="header-subtitle">System-wide analytics</span>
+                    </div>
+                </header>
+
+                <div class="reports-grid">
+                    <div class="card report-card">
+                        <h3 class="card-title"><i class="fas fa-users"></i> Students by Department</h3>
+                        <div id="reportDeptChart" class="chart-area"></div>
+                    </div>
+                    <div class="card report-card">
+                        <h3 class="card-title"><i class="fas fa-brain"></i> Issues Breakdown</h3>
+                        <div id="reportIssueChart" class="chart-area"></div>
+                    </div>
+                    <div class="card report-card">
+                        <h3 class="card-title"><i class="fas fa-calendar-days"></i> Sessions Per Month</h3>
+                        <div id="reportMonthlyChart" class="chart-area"></div>
+                    </div>
+                    <div class="card report-card">
+                        <h3 class="card-title"><i class="fas fa-chart-pie"></i> Follow-Up Status</h3>
+                        <div id="reportFollowupChart" class="chart-area"></div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top:20px;">
+                    <h3 class="card-title">Summary Statistics</h3>
+                    <div class="summary-stats" id="summaryStats"></div>
+                </div>
+            </div>
+
+            <!-- ==================== PAGE: HISTORY / FOLLOW-UP ==================== -->
+            <div class="page" id="page-history">
+                <header class="page-header">
+                    <div class="header-left">
+                        <h2>Follow-Up & History</h2>
+                        <span class="header-subtitle" id="historyCountLabel">0 records</span>
+                    </div>
+                </header>
+
+                <div class="card table-card">
+                    <div class="table-wrap">
+                        <table class="data-table" id="historyTable">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Session Date</th>
+                                    <th>Problem</th>
+                                    <th>Counsellor Remarks</th>
+                                    <th>Follow-Up Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyBody"></tbody>
+                        </table>
+                    </div>
+                    <p class="empty-state" id="historyEmpty">No follow-up records yet. Sessions will appear here for
+                        tracking.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- Student Registration Modal -->
+    <div class="modal-overlay" id="studentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="studentModalTitle">📋 Register New Student</h3>
+                <button class="modal-close" onclick="closeModal('studentModal')">&times;</button>
+            </div>
+            <form id="studentForm" onsubmit="saveStudent(event)">
+                <input type="hidden" id="studentEditId">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="studentName">Full Name *</label>
+                        <input type="text" id="studentName" required placeholder="Enter student name">
+                    </div>
+                    <div class="form-group">
+                        <label for="studentRegNo">Register Number *</label>
+                        <input type="text" id="studentRegNo" required placeholder="e.g. 2024CSE001">
+                    </div>
+                    <div class="form-group">
+                        <label for="studentDept">Department *</label>
+                        <select id="studentDept" required>
+                            <option value="">Select Department</option>
+                            <option value="CSE">Computer Science (CSE)</option>
+                            <option value="ECE">Electronics (ECE)</option>
+                            <option value="EEE">Electrical (EEE)</option>
+                            <option value="MECH">Mechanical (MECH)</option>
+                            <option value="CIVIL">Civil (CIVIL)</option>
+                            <option value="IT">Information Technology (IT)</option>
+                            <option value="AIDS">AI & Data Science (AIDS)</option>
+                            <option value="MBA">MBA</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentYear">Year of Study *</label>
+                        <select id="studentYear" required>
+                            <option value="">Select Year</option>
+                            <option value="I">I Year</option>
+                            <option value="II">II Year</option>
+                            <option value="III">III Year</option>
+                            <option value="IV">IV Year</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentPhone">Phone Number *</label>
+                        <input type="tel" id="studentPhone" required placeholder="Enter phone number">
+                    </div>
+                    <div class="form-group">
+                        <label for="studentEmail">Email</label>
+                        <input type="email" id="studentEmail" placeholder="Enter email address">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="studentIssue">Primary Concern</label>
+                        <select id="studentIssue">
+                            <option value="">No specific concern</option>
+                            <option value="Academic">Academic</option>
+                            <option value="Personal">Personal</option>
+                            <option value="Career">Career</option>
+                            <option value="Mental Health">Mental Health</option>
+                            <option value="Financial">Financial</option>
+                            <option value="Attendance">Attendance</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('studentModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Session Modal -->
+    <div class="modal-overlay" id="sessionModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="sessionModalTitle">🧠 Record Counselling Session</h3>
+                <button class="modal-close" onclick="closeModal('sessionModal')">&times;</button>
+            </div>
+            <form id="sessionForm" onsubmit="saveSession(event)">
+                <input type="hidden" id="sessionEditId">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="sessionDate">Session Date *</label>
+                        <input type="date" id="sessionDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionTime">Time</label>
+                        <input type="time" id="sessionTime">
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionStudent">Student *</label>
+                        <select id="sessionStudent" required>
+                            <option value="">Select Student</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionCounsellor">Counsellor *</label>
+                        <select id="sessionCounsellor" required>
+                            <option value="">Select Counsellor</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionProblem">Problem Type *</label>
+                        <select id="sessionProblem" required>
+                            <option value="">Select Problem Type</option>
+                            <option value="Academic">Academic</option>
+                            <option value="Personal">Personal</option>
+                            <option value="Career">Career</option>
+                            <option value="Mental Health">Mental Health</option>
+                            <option value="Financial">Financial</option>
+                            <option value="Attendance">Attendance</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionStatus">Session Status</label>
+                        <select id="sessionStatus">
+                            <option value="Completed">Completed</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="sessionRemarks">Counsellor Remarks / Observations</label>
+                        <textarea id="sessionRemarks" rows="3"
+                            placeholder="Record observations during the session..."></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="sessionAction">Action Taken / Suggestions</label>
+                        <textarea id="sessionAction" rows="3"
+                            placeholder="Suggest solutions and record actions taken..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionFollowupDate">Follow-Up Date</label>
+                        <input type="date" id="sessionFollowupDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="sessionFollowupStatus">Follow-Up Status</label>
+                        <select id="sessionFollowupStatus">
+                            <option value="Pending">Pending</option>
+                            <option value="Improving">Improving</option>
+                            <option value="Not Improved">Not Improved</option>
+                            <option value="Resolved">Resolved</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('sessionModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Session</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Appointment Modal -->
+    <div class="modal-overlay" id="appointmentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="appointmentModalTitle">📅 Schedule Appointment</h3>
+                <button class="modal-close" onclick="closeModal('appointmentModal')">&times;</button>
+            </div>
+            <form id="appointmentForm" onsubmit="saveAppointment(event)">
+                <input type="hidden" id="apptEditId">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="apptDate">Date *</label>
+                        <input type="date" id="apptDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="apptTime">Time *</label>
+                        <input type="time" id="apptTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="apptStudent">Student *</label>
+                        <select id="apptStudent" required>
+                            <option value="">Select Student</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="apptCounsellor">Counsellor *</label>
+                        <select id="apptCounsellor" required>
+                            <option value="">Select Counsellor</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="apptPurpose">Purpose</label>
+                        <select id="apptPurpose">
+                            <option value="Academic">Academic</option>
+                            <option value="Personal">Personal</option>
+                            <option value="Career">Career</option>
+                            <option value="Mental Health">Mental Health</option>
+                            <option value="Follow-Up">Follow-Up</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('appointmentModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Appointment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Counsellor Modal -->
+    <div class="modal-overlay" id="counsellorModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="counsellorModalTitle">👩‍🏫 Add Counsellor</h3>
+                <button class="modal-close" onclick="closeModal('counsellorModal')">&times;</button>
+            </div>
+            <form id="counsellorForm" onsubmit="saveCounsellor(event)">
+                <input type="hidden" id="counsellorEditId">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="counsellorName">Full Name *</label>
+                        <input type="text" id="counsellorName" required placeholder="e.g. Dr. Ramya">
+                    </div>
+                    <div class="form-group">
+                        <label for="counsellorDesig">Designation *</label>
+                        <input type="text" id="counsellorDesig" required placeholder="e.g. Head Counsellor">
+                    </div>
+                    <div class="form-group">
+                        <label for="counsellorDept">Department</label>
+                        <input type="text" id="counsellorDept" placeholder="e.g. Psychology">
+                    </div>
+                    <div class="form-group">
+                        <label for="counsellorPhone">Phone</label>
+                        <input type="tel" id="counsellorPhone" placeholder="Enter phone number">
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="counsellorEmail">Email</label>
+                        <input type="email" id="counsellorEmail" placeholder="Enter email address">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal('counsellorModal')">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Counsellor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
